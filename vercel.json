@@ -1,23 +1,28 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "app.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/api/posts/(.*)",
-        "dest": "/routes/posts.js"
-      },
-      {
-        "src": "/api-docs/(.*)",
-        "dest": "/app.js"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/app.js"
-      }
-    ]
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/posts/(.*)",
+      "dest": "/routes/posts.js"
+    },
+    {
+      "src": "/api-docs/(.*)",
+      "dest": "/app.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/app.js"
+    }
+  ],
+  "functions": {
+    "api/*": {
+      "maxDuration": 30 
+    }
   }
+}
