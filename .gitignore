@@ -1,3 +1,2 @@
-
-# Dependências
 node_modules/
+.env
