@@ -11,11 +11,11 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
-        description: "Development server",
+        url: "https://blog-api-phi-five.vercel.app",
+        description: "Prod server",
       },
       {
-        url: "https://blog-api-phi-five.vercel.app",
+        url: "http://localhost:3000",
         description: "Development server",
       },
     ],
