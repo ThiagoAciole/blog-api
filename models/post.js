@@ -27,8 +27,9 @@ const postSchema = new mongoose.Schema({
     default: Date.now,
   },
 }, {
-  timestamps: true, // Adiciona automaticamente createdAt e updatedAt
+  timestamps: true, 
 });
+
 
 const Post = mongoose.model("Post", postSchema);
 

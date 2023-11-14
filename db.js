@@ -1,6 +1,10 @@
-const mongoose = require('mongoose');
+// db.js
 
-const dbURI = 'mongodb+srv://thiagoaciole7:NHg1ErJArHUQiWuY@blog.h6hsmfs.mongodb.net/?retryWrites=true&w=majority';
+
+const mongoose = require('mongoose');
+require("dotenv").config();
+
+const dbURI = process.env.MONGODB_URI;
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -22,5 +26,6 @@ process.on('SIGINT', () => {
     process.exit(0);
   });
 });
+
 
 module.exports = mongoose;
