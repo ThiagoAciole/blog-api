@@ -316,26 +316,28 @@ app.delete("/posts/:postId", async (req, res) => {
  *                   type: string
  *                   example: Erro interno do servidor
  */
-app.post("/:postId/like", async (req, res) => {
+app.post("/posts/:postId/like", async (req, res) => {
   const postId = req.params.postId;
-  const { action } = req.body;
-
-  if (!["like", "unlike"].includes(action)) {
-    return res.status(400).json({ message: "Invalid action" });
-  }
 
   try {
-    const updatedPost = await Post.findByIdAndUpdate(
-      postId,
-      action === "like" ? { $inc: { likes: 1 } } : { $inc: { likes: -1 } },
-      { new: true }
-    );
+    const post = await Post.findById(postId);
 
-    if (!updatedPost) {
+    if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    res.status(200).json({ likes: updatedPost.likes });
+    // Verifica se a solicitação é para curtir ou descurtir
+    if (req.body.action === "like") {
+      post.likes += 1;
+    } else if (req.body.action === "unlike" && post.likes > 0) {
+      post.likes -= 1;
+    } else {
+      return res.status(400).json({ message: "Invalid action" });
+    }
+
+    await post.save();
+
+    res.status(200).json({ likes: post.likes });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
