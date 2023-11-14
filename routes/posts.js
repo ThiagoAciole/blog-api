@@ -117,7 +117,15 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+
+
 router.get("/", async (req, res) => {
+  return res.status(200).json({ message: "Hello World" });
+});
+
+
+
+router.get("/posts", async (req, res) => {
   try {
     const posts = await Post.find();
     res.json(posts);
@@ -126,7 +134,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", upload.array("images", 10), async (req, res) => {
+router.post("/posts", upload.array("images", 10), async (req, res) => {
   const { title, description, author } = req.body;
   const images = req.files.map((file) => file.buffer.toString("base64"));
 
