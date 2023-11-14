@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const sharp = require("sharp");
+const cors = require("cors"); // Add this line
 
 const Post = require("./models/post");
 
