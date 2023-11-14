@@ -8,6 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const swagger = require("./swagger");
 app.use("/api-docs", swagger.serveSwaggerUI, swagger.setupSwaggerUI);
+app.use(cors());
 app.use(express.json());
 
 const storage = multer.memoryStorage();
