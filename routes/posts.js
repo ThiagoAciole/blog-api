@@ -117,7 +117,6 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Rota para obter todos os posts
 router.get("/", async (req, res) => {
   try {
     const posts = await Post.find();
@@ -127,17 +126,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Rota para criar um novo post com upload de imagens
 router.post("/", upload.array("images", 10), async (req, res) => {
   const { title, description, author } = req.body;
-
-  // Obtém as imagens do buffer e converte para base64
   const images = req.files.map((file) => file.buffer.toString("base64"));
 
-  const newPost = new Post({ title, description, images, author });
-
   try {
-    const savedPost = await newPost.save();
+    const savedPost = await Post.create({ title, description, images, author });
     res.status(201).json(savedPost);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -146,26 +140,24 @@ router.post("/", upload.array("images", 10), async (req, res) => {
 
 router.post("/:postId/like", async (req, res) => {
   const postId = req.params.postId;
+  const { action } = req.body;
+
+  if (!["like", "unlike"].includes(action)) {
+    return res.status(400).json({ message: "Invalid action" });
+  }
 
   try {
-    const post = await Post.findById(postId);
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      action === "like" ? { $inc: { likes: 1 } } : { $inc: { likes: -1 } },
+      { new: true }
+    );
 
-    if (!post) {
+    if (!updatedPost) {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    // Verifica se a solicitação é para curtir ou descurtir
-    if (req.body.action === "like") {
-      post.likes += 1;
-    } else if (req.body.action === "unlike" && post.likes > 0) {
-      post.likes -= 1;
-    } else {
-      return res.status(400).json({ message: "Invalid action" });
-    }
-
-    await post.save();
-
-    res.status(200).json({ likes: post.likes });
+    res.status(200).json({ likes: updatedPost.likes });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });

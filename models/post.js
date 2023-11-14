@@ -1,4 +1,3 @@
-// models/post.js
 const mongoose = require("../db");
 
 const postSchema = new mongoose.Schema({

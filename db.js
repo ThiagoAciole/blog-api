@@ -1,6 +1,3 @@
-// db.js
-
-
 const mongoose = require('mongoose');
 
 const dbURI = 'mongodb+srv://thiagoaciole7:NHg1ErJArHUQiWuY@blog.h6hsmfs.mongodb.net/?retryWrites=true&w=majority';
@@ -25,6 +22,5 @@ process.on('SIGINT', () => {
     process.exit(0);
   });
 });
-
 
 module.exports = mongoose;
